@@ -73,7 +73,9 @@ def plot_all(folder_path=""):
 
 
         r = RPN(os.path.join(folder_path, f))
-        vlist = r.get_list_of_varnames()
+
+        #Exclude coordinate variables
+        vlist = [v for v in r.get_list_of_varnames() if v not in ["^^", ">>"]]
 
         #remove coordinates from the list
         for varname in vlist:
