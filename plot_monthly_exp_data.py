@@ -38,7 +38,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None)
 
     cmap = cm.get_cmap("jet", lut=20)
     for d in dates_sorted:
-        levs_sorted = sorted(data.items[0][1].keys())
+        levs_sorted = sorted(data.items()[0][1].keys())
         for lev in levs_sorted:
             fig = plt.figure()
 
