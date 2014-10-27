@@ -86,7 +86,7 @@ def plot_all(folder_path=""):
             lons, lats = r.get_longitudes_and_latitudes_for_the_last_read_rec()
             plot_variable(varname, data, img_folder=img_folder,
                           lons=lons, lats=lats,
-                          bmap=rll.get_basemap_object_for_lons_lats())
+                          bmap=rll.get_basemap_object_for_lons_lats(lons2d=lons, lats2d=lats))
 
 
 def main():
