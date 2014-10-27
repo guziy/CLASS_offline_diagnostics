@@ -1,4 +1,5 @@
 from matplotlib import cm
+from rpn.domains.rotated_lat_lon import RotatedLatLon
 
 __author__ = 'huziy'
 
@@ -61,7 +62,6 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None)
 
 
 def plot_all(folder_path=""):
-    bmap = None
 
     if folder_path == "":
         folder_path = sys.argv[1]
@@ -71,14 +71,20 @@ def plot_all(folder_path=""):
         if not "monthly_fields.rpn" in f.lower():
             continue
 
-        r = RPN(bmap)
+
+        r = RPN(os.path.join(folder_path, f))
         vlist = r.get_list_of_varnames()
 
         #remove coordinates from the list
         for varname in vlist:
             data = r.get_4d_field(name=varname)
             img_folder = os.path.join(folder_path, "img")
-            plot_variable(varname, data, img_folder=img_folder)
+            params = r.get_proj_parameters_for_the_last_read_rec()
+            rll = RotatedLatLon(**params)
+            lons, lats = r.get_longitudes_and_latitudes_for_the_last_read_rec()
+            plot_variable(varname, data, img_folder=img_folder,
+                          lons=lons, lats=lats,
+                          bmap=rll.get_basemap_object_for_lons_lats())
 
 
 def main():
