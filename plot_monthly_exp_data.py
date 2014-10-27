@@ -82,7 +82,7 @@ def plot_all(folder_path=""):
 
 
 def main():
-    pass
+    plot_all(folder_path="")
 
 if __name__ == '__main__':
     main()
