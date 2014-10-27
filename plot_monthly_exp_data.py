@@ -45,7 +45,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None)
             field = data[d][lev]
 
             print type(field)
-            field = np.ma.masked_where(field.abs() < 1e-10, field)
+            field = np.ma.masked_where(np.abs(field) < 1e-10, field)
 
             im = bmap.pcolormesh(x, y, field, cmap=cmap)
             bmap.colorbar(im)
