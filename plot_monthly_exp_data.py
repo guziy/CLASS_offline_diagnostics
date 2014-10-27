@@ -50,7 +50,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None)
             im = bmap.pcolormesh(x, y, field, cmap=cmap)
             bmap.colorbar(im)
 
-            fig.savefig("{}/{}_{}{:0d}_{}.jpg".format(img_folder, varname, current_year, current_month, lev))
+            fig.savefig("{}/{}_{}{:0d}_{}.png".format(img_folder, varname, current_year, current_month, lev))
             plt.close(fig)
 
         current_month += 1
