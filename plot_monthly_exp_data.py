@@ -36,6 +36,10 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None)
     current_month = start_month
     current_year = start_year
 
+    #Create image folder if necessary
+    if not os.path.isdir(img_folder):
+        os.mkdir(img_folder)
+
     cmap = cm.get_cmap("jet", lut=20)
     for d in dates_sorted:
         levs_sorted = sorted(data.items()[0][1].keys())
