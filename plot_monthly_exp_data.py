@@ -26,8 +26,18 @@ import numpy as np
 import sys
 
 
-def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None):
+def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None, limit_levels=None):
 
+    """
+
+    :param varname:
+    :param data:
+    :param img_folder:
+    :param lons:
+    :param lats:
+    :param bmap:
+    :param limit_levels: If only first n levels are needed then set it to n, otherwise leave it None
+    """
     dates = data.keys()
     dates_sorted = list(sorted(dates))
     start_date = dates_sorted[0]
@@ -43,7 +53,13 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None)
     cmap = cm.get_cmap("jet", lut=20)
     for d in dates_sorted:
         levs_sorted = sorted(data.items()[0][1].keys())
-        for lev in levs_sorted:
+        for i, lev in enumerate(levs_sorted):
+
+            if limit_levels is not None:
+                #only plot selected number of levels
+                if i >= limit_levels:
+                    break
+
             fig = plt.figure()
 
             field = data[d][lev]
@@ -54,7 +70,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None)
             im = bmap.pcolormesh(x, y, field, cmap=cmap)
             bmap.colorbar(im)
 
-            fig.savefig("{}/{}_{}{:0d}_{}.png".format(img_folder, varname, current_year, current_month, lev))
+            fig.savefig("{}/{}_{}{:02d}_{}.png".format(img_folder, varname, current_year, current_month, lev))
             plt.close(fig)
 
         current_month += 1
@@ -65,7 +81,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None)
 
 
 
-def plot_all(folder_path=""):
+def plot_all(folder_path="", limit_levels=1):
 
     if folder_path == "":
         folder_path = sys.argv[1]
@@ -90,7 +106,8 @@ def plot_all(folder_path=""):
             lons, lats = r.get_longitudes_and_latitudes_for_the_last_read_rec()
             plot_variable(varname, data, img_folder=img_folder,
                           lons=lons, lats=lats,
-                          bmap=rll.get_basemap_object_for_lons_lats(lons2d=lons, lats2d=lats))
+                          bmap=rll.get_basemap_object_for_lons_lats(lons2d=lons, lats2d=lats),
+                          limit_levels=limit_levels)
 
 
 def main():
