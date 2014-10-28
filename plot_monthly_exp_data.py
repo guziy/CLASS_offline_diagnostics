@@ -61,15 +61,17 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
                     break
 
             fig = plt.figure()
-
+            ax = plt.gca()
             field = data[d][lev]
 
             print type(field)
             field = np.ma.masked_where(np.abs(field) < 1e-10, field)
 
-            im = bmap.pcolormesh(x, y, field, cmap=cmap)
+            im = bmap.contourf(x, y, field, cmap=cmap, ax=ax)
             bmap.colorbar(im)
+            bmap.drawcoastlines(linewidth=0.3, ax=ax)
 
+            plt.title("{}: {}/{}".format(varname, current_month, current_year))
             fig.savefig("{}/{}_{}{:02d}_{}.png".format(img_folder, varname, current_year, current_month, lev))
             plt.close(fig)
 
