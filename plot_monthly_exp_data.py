@@ -68,7 +68,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
             field = np.ma.masked_where(np.abs(field) < 1e-10, field)
 
             if varname in ["SNO",]:
-                field = np.ma.masked_where(field > 999, field)
+                field = np.ma.masked_where(np.abs(field) > 999, field)
 
             im = bmap.contourf(x, y, field, cmap=cmap, ax=ax)
             bmap.colorbar(im)
