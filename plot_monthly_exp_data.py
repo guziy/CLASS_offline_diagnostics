@@ -1,4 +1,5 @@
 from matplotlib import cm
+from matplotlib.colors import BoundaryNorm
 from rpn.domains.rotated_lat_lon import RotatedLatLon
 
 __author__ = 'huziy'
@@ -50,7 +51,9 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
     if not os.path.isdir(img_folder):
         os.mkdir(img_folder)
 
-    cmap = cm.get_cmap("jet", lut=60)
+
+    nclevs = 60
+    cmap = cm.get_cmap("jet", lut=nclevs)
     for d in dates_sorted:
         levs_sorted = sorted(data.items()[0][1].keys())
         for i, lev in enumerate(levs_sorted):
@@ -75,7 +78,9 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
             if varname in ["SNO",]:
                 field = np.ma.masked_where(np.abs(field) > 999, field)
 
-            im = bmap.contourf(x, y, field, cmap=cmap, ax=ax)
+
+
+            im = bmap.contourf(x, y, field, cmap=cmap, ax=ax, levels=nclevs)
             bmap.colorbar(im)
             bmap.drawcoastlines(linewidth=0.3, ax=ax)
 
