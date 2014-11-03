@@ -91,7 +91,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
                     clevels += [-c for c in reversed(clevels)]
                     cmap = cm.get_cmap("seismic", lut=len(clevels) - 1)
                 else:
-                    clevels = [1, 5, 10, 20, 50, 80, 100, 150, 200, 250, 300, 400, 500, 600]
+                    clevels = [1, 5, 10, 20, 50, 80, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 1000]
 
 
             im = bmap.contourf(x, y, field, cmap=cmap, ax=ax, levels=clevels)
