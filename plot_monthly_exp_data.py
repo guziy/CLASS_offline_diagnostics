@@ -68,7 +68,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
             ax = plt.gca()
             field = data[d][lev]
 
-            print type(field)
+            #print type(field)
             field = np.ma.masked_where(np.abs(field) < 1e-10, field)
 
             ##Mask very small differences for temperature
