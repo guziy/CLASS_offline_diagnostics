@@ -50,7 +50,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
     if not os.path.isdir(img_folder):
         os.mkdir(img_folder)
 
-    cmap = cm.get_cmap("jet", lut=20)
+    cmap = cm.get_cmap("jet", lut=60)
     for d in dates_sorted:
         levs_sorted = sorted(data.items()[0][1].keys())
         for i, lev in enumerate(levs_sorted):
@@ -66,6 +66,11 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
 
             print type(field)
             field = np.ma.masked_where(np.abs(field) < 1e-10, field)
+
+            ##Mask very small differences for temperature
+            if varname in ["TBAR", "I0"]:
+                field = np.ma.masked_where(np.abs(field) < 0.01, field)
+
 
             if varname in ["SNO",]:
                 field = np.ma.masked_where(np.abs(field) > 999, field)
