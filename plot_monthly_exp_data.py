@@ -54,6 +54,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
 
     nclevs = 60
     cmap = cm.get_cmap("jet", lut=nclevs)
+    clevels = None
     for d in dates_sorted:
         levs_sorted = sorted(data.items()[0][1].keys())
         for i, lev in enumerate(levs_sorted):
@@ -75,12 +76,19 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
                 field = np.ma.masked_where(np.abs(field) < 0.01, field)
 
 
-            if varname in ["SNO",]:
+            if varname in ["SNO", ]:
                 field = np.ma.masked_where(np.abs(field) > 999, field)
 
+                #specify levels for the differences
+                if field.min() * field.max() < 0:
+                    clevels = [-300, -250, -200, -150, -100, -80, -50, -20, -10, -5, -1]
+                    clevels += [-c for c in reversed(clevels)]
+                    cmap = cm.get_cmap("seismic", lut=len(clevels) - 1)
+                else:
+                    clevels = [1, 5, 10, 20, 50, 80, 100, 150, 200, 250, 300]
 
 
-            im = bmap.contourf(x, y, field, cmap=cmap, ax=ax, levels=nclevs)
+            im = bmap.contourf(x, y, field, cmap=cmap, ax=ax, levels=clevels)
             bmap.colorbar(im)
             bmap.drawcoastlines(linewidth=0.3, ax=ax)
 
