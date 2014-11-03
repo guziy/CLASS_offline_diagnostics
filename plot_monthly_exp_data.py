@@ -87,7 +87,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
 
                 #specify levels for the differences
                 if field.min() * field.max() < 0:
-                    clevels = [-300, -250, -200, -150, -100, -80, -50, -20, -10, -5, -1]
+                    clevels = [-500, -400, -300, -250, -200, -150, -100, -80, -50, -20, -10, -5, -1]
                     clevels += [-c for c in reversed(clevels)]
                     cmap = cm.get_cmap("seismic", lut=len(clevels) - 1)
                 else:
