@@ -74,6 +74,12 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
             ##Mask very small differences for temperature
             if varname in ["TBAR", "I0"]:
                 field = np.ma.masked_where(np.abs(field) < 0.01, field)
+                if field.min() * field.max() < 0:
+                    clevels = [0, 1, 2, 5, 10, 20, 30]
+                    clevels = [-c for c in reversed(clevels)] + clevels
+                    cmap = cm.get_cmap("seismic", lut=len(clevels) - 1)
+                else:
+                    clevels = [230, 240, 250, 260, 265, 270, 275, 280, 290, 300, 310, 320]
 
 
             if varname in ["SNO", ]:
