@@ -4,10 +4,9 @@ from rpn.domains.rotated_lat_lon import RotatedLatLon
 
 __author__ = 'huziy'
 
-
 varname_to_nlevs = {
     "TBAR": 3,
-     "SNO": 1
+    "SNO": 1
 }
 
 
@@ -16,7 +15,6 @@ def do_seasonal_2d_plots(exp_name="", data_folder=""):
     :param exp_name: name of the experiment
     """
     for vname, nlevs in varname_to_nlevs:
-
         pass
 
 
@@ -28,7 +26,6 @@ import sys
 
 
 def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None, limit_levels=None):
-
     """
 
     :param varname:
@@ -47,13 +44,12 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
     current_month = start_month
     current_year = start_year
 
-    #Create image folder if necessary
+    # Create image folder if necessary
     if not os.path.isdir(img_folder):
         os.mkdir(img_folder)
 
-
     nclevs = 60
-    cmap = cm.get_cmap("jet", lut=nclevs)
+
     clevels = None
     for d in dates_sorted:
         levs_sorted = sorted(data.items()[0][1].keys())
@@ -74,34 +70,33 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
             ##Mask very small differences for temperature
             if varname in ["TBAR", "I0", "TSNO"]:
                 field = np.ma.masked_where(np.abs(field) < 0.01, field)
-                
-		if field.min() * field.max() < 0:
+
+                if field.min() * field.max() < 0:
                     clevels = [0, 1, 2, 5, 10, 20, 30]
                     clevels = [-c for c in reversed(clevels)] + clevels
                     cmap = cm.get_cmap("seismic", lut=len(clevels) - 1)
                 else:
-                    clevels = [230, 240, 250, 260, 265, 270, 275, 280, 290, 300, 310, 320]
-
+                    clevels = [100, 230, 240, 250, 260, 265, 270, 275, 280, 290, 300, 310, 320]
+                    cmap = cm.get_cmap("rainbow", lut=len(clevels) - 1)
 
             if varname in ["SNO", ]:
-                #field = np.ma.masked_where(np.abs(field) > 999, field)
+                # field = np.ma.masked_where(np.abs(field) > 999, field)
 
-                #specify levels for the differences
+                # specify levels for the differences
                 if field.min() * field.max() < 0:
                     clevels = [-500, -400, -300, -250, -200, -150, -100, -80, -50, -20, -10, -5, -1]
                     clevels += [-c for c in reversed(clevels)]
                     cmap = cm.get_cmap("seismic", lut=len(clevels) - 1)
                 else:
                     clevels = [1, 5, 10, 20, 50, 80, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 1000]
-
+                    cmap = cm.get_cmap("rainbow", lut=len(clevels) - 1)
 
             im = bmap.contourf(x, y, field, cmap=cmap, ax=ax, levels=clevels, extend="both")
             bmap.colorbar(im)
-	    cmap.set_over(cmap(clevels[-1]))
-	    cmap.set_under(cmap(clevels[0]))
+            cmap.set_over(cmap(clevels[-1]))
+            cmap.set_under(cmap(clevels[0]))
             bmap.drawcoastlines(linewidth=0.3, ax=ax)
-	    bmap.drawmapboundary(fill_color='0.75')
-
+            bmap.drawmapboundary(fill_color='0.75')
 
             plt.title("{}: {}/{}".format(varname, current_month, current_year))
             fig.savefig("{}/{}_{}{:02d}_{}.png".format(img_folder, varname, current_year, current_month, lev))
@@ -113,18 +108,14 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
             current_year += 1
 
 
-
-
 def plot_all(folder_path="", limit_levels=1):
-
     if folder_path == "":
         folder_path = sys.argv[1]
 
     for f in os.listdir(folder_path):
-        #skip files other than monthly
+        # skip files other than monthly
         if not "monthly_fields.rpn" in f.lower():
             continue
-
 
         r = RPN(os.path.join(folder_path, f))
 
@@ -146,6 +137,7 @@ def plot_all(folder_path="", limit_levels=1):
 
 def main():
     plot_all(folder_path="")
+
 
 if __name__ == '__main__':
     main()
