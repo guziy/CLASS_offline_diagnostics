@@ -72,9 +72,10 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
             field = np.ma.masked_where(np.abs(field) < 1e-10, field)
 
             ##Mask very small differences for temperature
-            if varname in ["TBAR", "I0"]:
+            if varname in ["TBAR", "I0", "TSNO"]:
                 field = np.ma.masked_where(np.abs(field) < 0.01, field)
-                if field.min() * field.max() < 0:
+                
+		if field.min() * field.max() < 0:
                     clevels = [0, 1, 2, 5, 10, 20, 30]
                     clevels = [-c for c in reversed(clevels)] + clevels
                     cmap = cm.get_cmap("seismic", lut=len(clevels) - 1)
@@ -83,7 +84,7 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
 
 
             if varname in ["SNO", ]:
-                field = np.ma.masked_where(np.abs(field) > 999, field)
+                #field = np.ma.masked_where(np.abs(field) > 999, field)
 
                 #specify levels for the differences
                 if field.min() * field.max() < 0:
@@ -94,9 +95,13 @@ def plot_variable(varname, data, img_folder="", lons=None, lats=None, bmap=None,
                     clevels = [1, 5, 10, 20, 50, 80, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 1000]
 
 
-            im = bmap.contourf(x, y, field, cmap=cmap, ax=ax, levels=clevels)
+            im = bmap.contourf(x, y, field, cmap=cmap, ax=ax, levels=clevels, extend="both")
             bmap.colorbar(im)
+	    cmap.set_over(cmap(clevels[-1]))
+	    cmap.set_under(cmap(clevels[0]))
             bmap.drawcoastlines(linewidth=0.3, ax=ax)
+	    bmap.drawmapboundary(fill_color='0.75')
+
 
             plt.title("{}: {}/{}".format(varname, current_month, current_year))
             fig.savefig("{}/{}_{}{:02d}_{}.png".format(img_folder, varname, current_year, current_month, lev))
